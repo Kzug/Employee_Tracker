@@ -38,14 +38,68 @@ function showMainMenu() {
       },
     ])
     .then((answer) => {
-      const viewDept = answer.main;
+      const userChoice = answer.main;
       console.log(answer);
-      if (viewDept === "View all departments") {
-        db.query("SELECT * FROM department", function (err, results) {
-          console.table(results);
-        });
+      switch (userChoice) {
+        case "View all departments":
+          db.query("SELECT * FROM department", function (err, results) {
+            console.table(results);
+            showMainMenu();
+          });
+          break;
+        case "View all roles":
+          db.query(
+            "SELECT role_info.id, title, salary, dept_name AS department FROM role_info INNER JOIN department ON role_info.department_id = department.id",
+            function (err, results) {
+              console.table(results);
+              showMainMenu();
+            }
+          );
+          break;
+        case "View all employees":
+          db.query(
+            "SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role_info.title as job_title, role_info.department_id, role_info.salary, employee.manager_id FROM employee INNER JOIN role_info ON role_info.id = employee.role_id", //left join
+            function (err, results) {
+              console.table(results);
+              showMainMenu();
+            }
+          );
+          break;
+        case "Add a department":
+          console.log(userChoice);
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                message: "Which department would you like to add?",
+                name: "deptname",
+              },
+            ])
+            .then((userAnswer) => {
+              console.log(userAnswer);
+              db.query(
+                "INSERT INTO department (dept_name) VALUES (?)",
+                userAnswer.deptname,
+                function (err, results) {
+                  db.query("SELECT * FROM department", function (err, results) {
+                    console.table(results);
+                    showMainMenu();
+                  });
+                }
+              );
+            });
+
+          break;
+        case "Add a role":
+          console.log("I own a dog");
+          break;
+        case "Add an employee":
+          console.log("I own a dog");
+          break;
+        case "Update an employee role":
+          console.log("I own a dog");
+          break;
       }
     });
 }
-
 showMainMenu();
