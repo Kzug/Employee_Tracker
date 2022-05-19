@@ -8,9 +8,9 @@ VALUES
 
 INSERT INTO role_info (department_id, title, salary)
 VALUES 
-(1, "Research Assistant", 500.50),
-(2, "Ad Designer", 750.50),
-(3, "Salesman", 600.50);
+(1, "Research Assistant", 30.000),
+(2, "Ad Designer", 40.000),
+(3, "Salesman", 50.000);
 
 INSERT into employee (role_id, first_name, last_name, manager_id)
 VALUES
